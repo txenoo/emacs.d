@@ -13,9 +13,27 @@
  '(fill-column 80)
  '(package-selected-packages
    (quote
-    (editorconfig zenburn-theme yasnippet yaml-mode xcscope package-utils multiple-cursors markdown-mode iedit highlight-current-line google-c-style glsl-mode gist fpaste dockerfile-mode company column-enforce-mode)))
+    (editorconfig zenburn-theme yasnippet yaml-mode xcscope package-utils multiple-cursors markdown-mode iedit highlight-current-line google-c-style glsl-mode gist fpaste epl dockerfile-mode company column-enforce-mode)))
  '(paren-set-mode (quote sexp))
- '(safe-local-variable-values (quote ((js-indent-level . 4))))
+ '(safe-local-variable-values
+   (quote
+    ((whitespace-line-column . 79)
+     (eval ignore-errors
+           (require
+            (quote whitespace))
+           (whitespace-mode 1))
+     (whitespace-style face indentation)
+     (eval progn
+           (c-set-offset
+            (quote case-label)
+            (quote 0))
+           (c-set-offset
+            (quote innamespace)
+            (quote 0))
+           (c-set-offset
+            (quote inline-open)
+            (quote 0)))
+     (js-indent-level . 4))))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
  '(tooltip-mode nil))
@@ -91,6 +109,11 @@
 (require 'twiki)
 (add-to-list 'auto-mode-alist' ("\\.twiki$" . twiki-mode))
 
+
+(require 'editorconfig)
+(editorconfig-mode 1)
+
+
 ;; C/C++ Mode
 (add-hook 'c-mode-common-hook
           (lambda ()
@@ -101,9 +124,14 @@
 
             ;; code indexer
             (require 'xcscope)
+            (cscope-setup)
             (cscope-minor-mode)
 
             ;; show trailing whitespaces
             (setq show-trailing-whitespace t)
+            (require 'whitespace)
+            (setq whitespace-style '(face empty tabs lines-tail trailing))
+            
+            
             )
           )
